@@ -74,7 +74,17 @@ std::string TimerEngine::formatTime() const {
 }
 
 float TimerEngine::progressPercentage() const {
-    const float total = (cached_state == PomodoroState::Focus) ? 1500.0f : (cached_state == PomodoroState::ShortBreak ? 300.0f : 900.0f);
+    float total = 1500.0f; // backup fallback
+
+    if (cached_state == PomodoroState::Focus) {
+        total = static_cast<float>(focus_mins * 60);
+    } else if (cached_state == PomodoroState::ShortBreak) {
+        total = static_cast<float>(short_break_mins * 60);
+    } else if (cached_state == PomodoroState::LongBreak) {
+        total = static_cast<float>(long_break_mins * 60);
+    }
+
+    if (total <= 0.0f) return 0.0f;
     return (total - static_cast<float>(remaining_time.count())) / total;
 }
 
