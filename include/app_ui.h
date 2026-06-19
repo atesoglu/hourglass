@@ -15,9 +15,7 @@ private:
     TimerEngine& timer;
     std::atomic<bool> running{true};
 
-    // --- New Logger Cache ---
+    // --- Add these lines to fix the state context ---
     std::vector<std::string> system_logs;
     void addLogMessage(const std::string& message);
-
-    ftxui::Element renderLayout();
 };

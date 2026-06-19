@@ -11,6 +11,14 @@ using namespace ftxui;
 
 AppUi::AppUi(TimerEngine& engine) : timer(engine) {}
 
+void AppUi::addLogMessage(const std::string& message) {
+    // Keep only the last 4 log entries so it doesn't overflow our split panel
+    if (system_logs.size() >= 4) {
+        system_logs.erase(system_logs.begin());
+    }
+    system_logs.push_back("» " + message);
+}
+
 void AppUi::run() {
     auto screen = ScreenInteractive::Fullscreen();
 
@@ -191,12 +199,4 @@ void AppUi::run() {
     if (timer_thread.joinable()) {
         timer_thread.join();
     }
-}
-
-void AppUi::addLogMessage(const std::string& message) {
-    // Keep only the last 4 log entries so it doesn't overflow our split panel
-    if (system_logs.size() >= 4) {
-        system_logs.erase(system_logs.begin());
-    }
-    system_logs.push_back("» " + message);
 }
