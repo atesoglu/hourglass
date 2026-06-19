@@ -6,6 +6,8 @@ A high-performance, responsive split-screen Pomodoro and session-tracking engine
 
 ---
 
+![screenshot.png](screenshot.png)
+
 ## 🚀 Key Features
 
 *   **Reactive Split-Screen Architecture:** Real-time dual-panel view parsing deep-work performance blocks on the left and engine runtime controls on the right.
