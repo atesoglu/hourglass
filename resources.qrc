@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/sounds">
-        <file>sounds/chime.wav</file>
-        <file>sounds/beep.wav</file>
-        <file>sounds/bell.wav</file>
-    </qresource>
-</RCC>
