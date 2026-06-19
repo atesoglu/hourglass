@@ -48,14 +48,17 @@ void AppUi::run() {
         }
         if (event == Event::Character(' ')) {
             timer.togglePause();
+            addLogMessage("Toggled session pause state");
             return true;
         }
         if (event == Event::Character('r')) {
             timer.reset();
+            addLogMessage("Manual system timer reset issued");
             return true;
         }
         if (event == Event::Character('t')) {
             timer.skipToTrigger();
+            addLogMessage("Fast-forward test trigger skipped session");
             return true;
         }
         return false;
@@ -119,6 +122,22 @@ void AppUi::run() {
             long_slider->Render()  | (selected_preset != 3 ? dim : nothing),
         });
 
+        // Generate the scrolling log output components reactively
+        Elements log_elements;
+        if (system_logs.empty()) {
+            log_elements.push_back(text("System idling. Awaiting initialization...") | dim);
+        } else {
+            for (const auto& log : system_logs) {
+                log_elements.push_back(text(log) | color(Color::DarkCyan));
+            }
+        }
+
+        auto live_log_box = vbox(std::move(log_elements))
+            | frame
+            | border
+            | color(Color::Cyan)
+            | size(HEIGHT, EQUAL, 6);
+
         // FIXED: Changed separatorLine() down below to a standard separator()
         auto right_panel = vbox({
             right_title,
@@ -172,4 +191,12 @@ void AppUi::run() {
     if (timer_thread.joinable()) {
         timer_thread.join();
     }
+}
+
+void AppUi::addLogMessage(const std::string& message) {
+    // Keep only the last 4 log entries so it doesn't overflow our split panel
+    if (system_logs.size() >= 4) {
+        system_logs.erase(system_logs.begin());
+    }
+    system_logs.push_back("» " + message);
 }
